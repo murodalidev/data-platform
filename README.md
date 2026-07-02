@@ -1,6 +1,6 @@
 # Data Engineering Template
 
-> https://github.com/murodalidev/data-engineering-template
+> https://github.com/murodalidev/data-platform
 
 Data engineering proyektlari uchun tayyor shablon: **Airflow** (orkestratsiya) + **dbt** (transformatsiya) + **Python** (ingestion), Claude Code bilan ishlashga to'liq sozlangan.
 
@@ -39,10 +39,10 @@ Data engineering proyektlari uchun tayyor shablon: **Airflow** (orkestratsiya) +
 
 ```bash
 # 1. Template'dan yangi repo yaratish
-gh repo create yangi-proyekt --template murodalidev/data-engineering-template --private --clone
+gh repo create yangi-proyekt --template murodalidev/data-platform --private --clone
 cd yangi-proyekt
 
-# yoki GitHub saytida: https://github.com/murodalidev/data-engineering-template
+# yoki GitHub saytida: https://github.com/murodalidev/data-platform
 # → yashil "Use this template" tugmasi → "Create a new repository"
 
 # 2. Muhitni sozlash
