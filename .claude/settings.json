@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(make *)",
+      "Bash(uv run *)",
+      "Bash(uv sync*)",
+      "Bash(pytest*)",
+      "Bash(ruff *)",
+      "Bash(sqlfluff *)",
+      "Bash(dbt compile*)",
+      "Bash(dbt parse*)",
+      "Bash(dbt ls*)",
+      "Bash(dbt test*)",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git add *)",
+      "Bash(docker compose ps*)",
+      "Bash(docker compose logs*)"
+    ],
+    "ask": [
+      "Bash(dbt run*)",
+      "Bash(dbt build*)",
+      "Bash(dbt run-operation*)",
+      "Bash(git push*)",
+      "Bash(git commit*)",
+      "Bash(docker compose up*)",
+      "Bash(docker compose down*)",
+      "Bash(airflow *)"
+    ],
+    "deny": [
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(**/secrets/**)",
+      "Read(**/*credentials*)",
+      "Read(**/*.pem)",
+      "Read(**/*.key)",
+      "Bash(rm -rf *)",
+      "Bash(dbt run --full-refresh*)",
+      "Bash(psql*DROP*)",
+      "Bash(git push --force*)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run ruff format $CLAUDE_FILE_PATHS 2>/dev/null || true"
+          }
+        ]
+      }
+    ]
+  }
+}

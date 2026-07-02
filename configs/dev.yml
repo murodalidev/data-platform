@@ -1,0 +1,7 @@
+warehouse:
+  schema_raw: raw
+  schema_staging: staging
+  schema_marts: marts
+pipeline_defaults:
+  incremental_lookback_days: 3
+  volume_anomaly_factor: 3.0

@@ -1,0 +1,26 @@
+name: CI
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync
+      - name: Lint (ruff)
+        run: |
+          uv run ruff check src/ dags/ tests/
+          uv run ruff format --check src/ dags/ tests/
+      - name: Test (pytest)
+        run: uv run pytest tests/ -v
+      - name: dbt parse (compile check, no warehouse needed)
+        env:
+          WAREHOUSE_USER: ci
+          WAREHOUSE_PASSWORD: ci
+          WAREHOUSE_DB: ci
+        run: |
+          cd dbt && uv run dbt parse --profiles-dir .
