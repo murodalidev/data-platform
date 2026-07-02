@@ -1,6 +1,9 @@
 """Pipeline run auditing: every ingestion records its counts to _meta.pipeline_runs."""
+
 from dataclasses import dataclass
 from datetime import datetime
+
+from psycopg import Connection
 
 from src.utils.logging import get_logger
 
@@ -23,6 +26,8 @@ create table if not exists _meta.pipeline_runs (
 
 @dataclass
 class RunAudit:
+    """One pipeline run's counts for the audit table."""
+
     pipeline: str
     interval_start: datetime
     interval_end: datetime
@@ -32,7 +37,7 @@ class RunAudit:
     status: str = "success"
 
 
-def record_run(conn, audit: RunAudit) -> None:
+def record_run(conn: Connection, audit: RunAudit) -> None:
     """Insert one audit row. `conn` is a psycopg connection (injected, testable)."""
     with conn.cursor() as cur:
         cur.execute(DDL)
@@ -44,11 +49,19 @@ def record_run(conn, audit: RunAudit) -> None:
             values (%s, %s, %s, %s, %s, %s, %s)
             """,
             (
-                audit.pipeline, audit.interval_start, audit.interval_end,
-                audit.rows_extracted, audit.rows_loaded, audit.rows_rejected,
+                audit.pipeline,
+                audit.interval_start,
+                audit.interval_end,
+                audit.rows_extracted,
+                audit.rows_loaded,
+                audit.rows_rejected,
                 audit.status,
             ),
         )
     conn.commit()
-    logger.info("audit recorded: %s [%s → %s]", audit.pipeline,
-                audit.interval_start, audit.interval_end)
+    logger.info(
+        "audit recorded: %s [%s -> %s]",
+        audit.pipeline,
+        audit.interval_start,
+        audit.interval_end,
+    )
